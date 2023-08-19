@@ -1,0 +1,12 @@
+// Useful link: https://code.visualstudio.com/docs/editor/tasks
+
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Test task",
+            "type": "shell",
+            "command" : "ls -al"
+        }
+    ]
+}

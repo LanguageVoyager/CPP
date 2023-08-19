@@ -1,0 +1,6 @@
+// Useful link: https://code.visualstudio.com/docs/getstarted/settings
+
+{
+    "editor.renderWhitespace": "all",
+    "editor.insertSpaces": true
+}
