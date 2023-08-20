@@ -34,3 +34,4 @@
 
 # Build artifects
 Build
+!3rdparty/libs/**
