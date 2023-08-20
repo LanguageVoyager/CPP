@@ -13,7 +13,16 @@ set -e
 fnHelp()
 {
     echo "Use syntex:"
-    echo -e "\t ${0} [Build configuration type] "
+    echo -e "\t ${0} [Build configuration type] -cbldDh -t <CMake target name>"
+    echo
+    echo -e "\tBuild configuration type: '--release' or '--debug'. If not provided then default is '--release'"
+    echo -e "\tc    Configure - Configure CMake"
+    echo -e "\tb    Build - Builds source code"
+    echo -e "\tl    List - Lists all CMake targets for specified configuration"
+    echo -e "\td    Delete - Delete build artifacts for specific build configurations"
+    echo -e "\tD    Delete All - Delete build artifacts for all build configurations"
+    echo -e "\tt    Target - Build specific CMake target"
+    echo -e "\th    Help - Print help"
     exit 0;
 }
 
@@ -75,7 +84,7 @@ fnBuild()
 {
     echo "Start: Build using CMake"
     fnConfigureIfRequired
-    cmake ${varCMakeCommonBuildParams} --target "${varProjectName}Main"
+    cmake ${varCMakeCommonBuildParams} --target "${varProjectName}Source"
     echo "End: Build using CMake"
 }
 
@@ -91,13 +100,24 @@ fnBuildTarget()
 }
 
 ###############################################################################
+# List CMake targets
+#------------------------------------------------------------------------------
+fnListCMakeTargets()
+{
+    echo "Start: Evaluate variables for script"
+    fnConfigureIfRequired
+    cmake --build "${varConfigTypeBuildPath}" --target help
+    echo "End: Evaluate variables for script"
+}
+
+###############################################################################
 # Delete build artifects of specific build configuration
 #------------------------------------------------------------------------------
 fnDelete()
 {
     echo "Start: Delete build artifects of specific build configuration"
     if [ -d "${varConfigTypeBuildPath}" ]; then
-        rm -r "${varConfigTypeBuildPath}"
+        rm -rf "${varConfigTypeBuildPath}"
     fi
     echo "End: Delete build artifects of specific build configuration"
 }
@@ -109,7 +129,7 @@ fnDeleteAll()
 {
     echo "Start: Delete build artifects of all build configurations"
     if [ -d "${varCMakeBuildDir}" ]; then
-        rm -r "${varCMakeBuildDir}"
+        rm -rf "${varCMakeBuildDir}"
     fi
     echo "End: Delete build artifects of all build configurations"
 }
@@ -159,7 +179,7 @@ fnEvaluateVariables
 # Print variables for script
 fnPrintVariables
 
-while getopts ":cbt:dDh" varOption ${varArgs}; do
+while getopts ":cbt:ldDh" varOption ${varArgs}; do
     case $varOption in
         c) # Configure
             fnConfigure
@@ -171,6 +191,10 @@ while getopts ":cbt:dDh" varOption ${varArgs}; do
 
         t) # Build specific CMake target
             fnBuildTarget "${OPTARG}"
+        ;;
+
+        l) # List CMake targets
+            fnListCMakeTargets
         ;;
 
         d) # Delete build artifects of specific build configuration

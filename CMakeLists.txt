@@ -29,11 +29,18 @@ endif()
 # Find required programm and libraries path
 find_library( PROJ_GLOBAL_LIB_PTHREAD pthread REQUIRED )
 
+# Set sub-projects name
+set( SUBPROJ_NAME_SOURCE "${PROJ_GLOBAL_BASE_NAME}Source" )
+set( SUBPROJ_NAME_TEST "${PROJ_GLOBAL_BASE_NAME}Test" )
+set( SUBPROJ_NAME_THIRD_PARTY "${PROJ_GLOBAL_BASE_NAME}ThirdParty" )
+
 # Set project paths
 set( CMAKE_BINARY_DIR "${PROJECT_BINARY_DIR}" )
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs/static" )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs/shared" )
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" )
+set( PROJ_GLOBAL_THIRD_PARTY_LIBS_DIR "${PROJECT_SOURCE_DIR}/3rdparty/libs" )
+set( PROJ_GLOBAL_THIRD_PARTY_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/3rdparty/include" )
 
 # Print informations
 message( "Project name: ${PROJECT_NAME}" )
@@ -42,13 +49,11 @@ message( "Static libraries path: ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}" )
 message( "Shared libraries path: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}" )
 message( "Executables path: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}" )
 
-# Set sub-projects name
-set( SUBPROJ_NAME_SOURCE "${PROJ_GLOBAL_BASE_NAME}Source" )
-set( SUBPROJ_NAME_TEST "${PROJ_GLOBAL_BASE_NAME}Test" )
 
 # Add sub-directories
 add_subdirectory( src )
 add_subdirectory( test )
+add_subdirectory( 3rdparty )
 
 # Add custom target and dependencies to build everything
 add_custom_target( "${PROJECT_NAME}" )
